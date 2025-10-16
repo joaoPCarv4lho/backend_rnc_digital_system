@@ -1,10 +1,19 @@
 from typing import List, Optional, TYPE_CHECKING
 from sqlmodel import Field, SQLModel, Relationship
+from enum import Enum
 import bcrypt
 
 if TYPE_CHECKING:
     from .rnc_model import RNC
     from .rnc_observation_model import RNC_Observation
+
+class UserRole(str, Enum):
+    ADMIN = "admin"
+    OPERADOR = "operador"
+    QUALIDADE = "qualidade"
+    TECNICO_USINAGEM = "tecnico_usinagem"
+    TECNICO_FUNDICAO = "tecnico_fundicao"
+    ENGENHARIA = "engenharia"
 
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
