@@ -5,7 +5,7 @@ from app import model, schema
 class UserRepository:
     """Camada de acesso e manipulação de dados de usuário"""
 
-    def _init_(self, db: Session):
+    def __init__(self, db: Session):
         self.db = db
 
     def get_by_email(self, email: str) -> model.User | None:
@@ -16,7 +16,7 @@ class UserRepository:
 
     def create(self, user_data: schema.UserCreate) -> model.User:
         if self.get_by_email(user_data.email):
-            raise ValueError("Email already registered")
+            raise ValueError("Email already registered!")
 
         db_user = model.User(
             name=user_data.name,
