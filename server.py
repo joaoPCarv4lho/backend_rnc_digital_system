@@ -1,9 +1,10 @@
-from contextlib import asynccontextmanager
-from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.config import settings
 from app.core.security import create_access_token
+from contextlib import asynccontextmanager
+from app.core.config import settings
 from datetime import timedelta
+from fastapi import FastAPI
+import os
 
 from app.database import create_db_and_tables
 from app.router import user_router, auth_router
@@ -15,7 +16,7 @@ async def lifespan(app: FastAPI):
     # Debug das configurações
     print(f"🔑 SECRET_KEY configurada: {len(settings.SECRET_KEY) > 20}")
     print(f"⚙️ ALGORITHM: {settings.ALGORITHM}")
-    print(f"⏰ Token expira em: {settings.ACCESS_TOKEN_EXPIRE_MINUTES} minutos")
+    print(f"⏰ Token expira em: {settings.ACCESS_TOKEN_EXPIRE_IN_MINUTES} minutos")
     
     # Teste SIMPLES de criação de token
     try:
@@ -26,7 +27,6 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"❌ Teste de token: FALHA - {e}")
         # Força uma SECRET_KEY para desenvolvimento
-        import os
         os.environ["SECRET_KEY"] = "chave_de_desenvolvimento_32_caracteres_123!!"
         print("🔄 Tentando com SECRET_KEY forçada...")
         try:

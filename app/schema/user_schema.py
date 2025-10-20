@@ -13,6 +13,11 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
+#Schema para realização do login
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
 #Schema para leitura: Nunca incluir senha
 class UserRead(UserBase):
     id: int
