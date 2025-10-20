@@ -1,5 +1,5 @@
 # Importa cada modelo para que possam ser acessados diretamente do pacote 'models'
-from .user_model import User
+from .user_model import User, UserRole
 from .part_model import Part
 from .machine_model import Machine
 from .rnc_observation_model import RNC_Observation
@@ -10,7 +10,7 @@ from .rnc_model import RNC
 __all__ = [
     "Part",
     "Machine",
-    "User",
+    "User", "UserRole",
     "RNC_Defect",
     "RNC_Observation",
     "RNC",
