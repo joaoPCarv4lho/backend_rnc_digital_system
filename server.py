@@ -7,7 +7,7 @@ from fastapi import FastAPI
 import os
 
 from app.database import create_db_and_tables
-from app.router import user_router, auth_router
+from app.router import user_router, auth_router, rnc_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -62,6 +62,7 @@ app.add_middleware(
 
 app.include_router(auth_router.router, prefix="/auth", tags=["Authentication"])
 app.include_router(user_router.router, prefix="/user", tags=["Users"])
+app.include_router(rnc_router.router, prefix="/rnc", tags=["RNC"])
 
 @app.get('/')
 async def root():
