@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session
 from typing import Annotated
 
-from app.database import get_db
 from app.repository.user_repository import UserRepository
 from app.service.user_service import UserService
-from app import model, schema
 from app.core.dependencies import require_role
+from app.database import get_db
+from app import model, schema
 
 router = APIRouter()
 
@@ -36,4 +36,4 @@ async def creating_users( user_data: schema.UserCreate, db: Annotated[Session, D
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal Server Error")
-    
+
