@@ -24,6 +24,7 @@ class RNC(SQLModel, table=True):
     condition: str = Field(index=True)
     critical_level: str
     observations: str = Field(default=None)
+    part_code: str = Field(index=True, unique=True)
 
     date_of_occurrence: datetime
     opening_date: datetime = Field(default_factory=datetime.utcnow)
