@@ -34,6 +34,19 @@ async def get_all_rncs_active(db: Annotated[Session, Depends(get_db)], status: O
     except Exception as e :
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal Server Error.")
 
+@router.get('/partCode/{partCode}', response_model=schema.RNCRead, status_code=status.HTTP_200_OK, dependencies=[Depends(require_role(model.UserRole.ADMIN, model.UserRole.QUALIDADE, model.UserRole.TECNICO_FUNDICAO, model.UserRole.ENGENHARIA))])
+async def get_rnc_by_part_code(partCode: str, db: Annotated[Session, Depends(get_db)]):
+    """Busca um RNC pelo código da peça"""
+    repo = repository.RNCRepository(db)
+    rnc_service = service.RNCService(repo)
+    try:
+        rnc = rnc_service.get_rnc_by_part_code(partCode)
+        return rnc
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    except Exception as e :
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal Server Error.")
+
 @router.get('/list_user_rncs', response_model=list[schema.RNCRead], status_code=status.HTTP_200_OK, dependencies=[Depends(require_role(model.UserRole.OPERADOR, model.UserRole.TECNICO_FUNDICAO, model.UserRole.ENGENHARIA, model.UserRole.QUALIDADE))])
 async def get_user_rncs(db: Annotated[Session, Depends(get_db)], current_user: Annotated[model.User, Depends(get_current_user)]):
     """Lista todos os RNCs abertos pelo usuário autenticado"""
