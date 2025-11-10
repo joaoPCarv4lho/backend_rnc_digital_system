@@ -15,7 +15,6 @@ class RNCCreate(BaseModel):
     critical_level: str
     title: str
     observations: Optional[str] = None
-    part_code: str
     open_by_id: int
 
 class RNCUpdate(BaseModel):
@@ -34,7 +33,6 @@ class RNCRead(BaseModel):
     status: model.RNCStatus
     condition: model.RNCCondition
     observations: Optional[str] = None
-    critical_level: str
     part_id: int
     open_by_id: int
     current_responsible_id: Optional[int] = None
