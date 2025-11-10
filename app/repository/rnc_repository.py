@@ -7,10 +7,18 @@ class RNCRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_active_rnc_by_part(self, part_id: int) -> model.RNC:
+    def get_rnc_by_part_code(self, part_code: str) -> model.RNC:
+        """Retorna o RNC associado a um código de peça específico, se existir"""
         statement = select(model.RNC).where(
-            model.RNC.part_id == part_id, 
-            model.RNC.status != model.RNCStatus.FECHADO.value
+            model.RNC.part_code == part_code
+        )
+        return self.db.exec(statement).first()
+
+    def get_active_rnc_by_part(self, part_id: int) -> Optional[model.RNC]:
+        """Retorna o RNC ativo associado a uma peça específica, se existir"""
+        statement = select(model.RNC).where(
+            model.RNC.part_id == part_id,
+            model.RNC.status == model.RNCStatus.ABERTO.value
         )
         return self.db.exec(statement).first()
 
@@ -34,6 +42,7 @@ class RNCRepository:
             date_of_occurrence=rnc_data.date_of_occurrence,
             part_id=rnc_data.part_id,
             observations=rnc_data.observations,
+            part_code=rnc_data.part_code,
             status=model.RNCStatus.ABERTO.value,
             condition=model.RNCCondition.EM_ANALISE.value,
             open_by_id=open_by_id
@@ -41,6 +50,7 @@ class RNCRepository:
 
         self.db.add(db_rnc)
         self.db.commit()
+        self.db.rollback()
         self.db.refresh(db_rnc)
         return db_rnc
     
