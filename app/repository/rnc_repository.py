@@ -10,14 +10,7 @@ class RNCRepository:
     def get_rnc_by_part_code(self, part_code: str) -> model.RNC:
         """Retorna o RNC associado a um código de peça específico, se existir"""
         statement = select(model.RNC).where(
-            model.RNC.part_code == part_code
-        )
-        return self.db.exec(statement).first()
-
-    def get_active_rnc_by_part(self, part_id: int) -> Optional[model.RNC]:
-        """Retorna o RNC ativo associado a uma peça específica, se existir"""
-        statement = select(model.RNC).where(
-            model.RNC.part_id == part_id,
+            model.RNC.part_code == part_code,
             model.RNC.status == model.RNCStatus.ABERTO.value
         )
         return self.db.exec(statement).first()
@@ -30,7 +23,7 @@ class RNCRepository:
     def create_rnc(self, rnc_data: schema.RNCCreate, open_by_id: int) -> model.RNC:
         """Cria um novo RNC no banco"""
 
-        existing = self.get_active_rnc_by_part(rnc_data.part_id)
+        existing = self.get_rnc_by_part_code(rnc_data.part_code)
         if existing:
             raise ValueError(f"A peça (ID {rnc_data.part_id}) já está associada ao RNC ativo n° {existing.num_rnc}.")
 
