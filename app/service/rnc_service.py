@@ -22,6 +22,13 @@ class RNCService:
         """Busca por um RNC específico pelo id"""
         return self.repo.get_by_num(num_rnc)
 
+    def get_rnc_by_part_code(self, partCode: str):
+        """Busca por um RNC específico pelo código da peça"""
+        rnc = self.repo.get_rnc_by_part_code(partCode)
+        if not rnc:
+            raise ValueError(f"RNC com código de peça '{partCode}' não foi encontrado")
+        return rnc
+
     def get_rncs_by_user(self, current_user: model.User) -> list[schema.RNCRead]:
         """Busca por RNCs abertos pelo usuário autenticado"""
         rncs = self.repo.get_by_user_id(current_user.id)
