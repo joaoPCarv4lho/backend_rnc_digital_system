@@ -1,177 +1,133 @@
-RNC Digital System
+# 🏭 RNC Digital System
 
-O RNC Digital System é uma solução corporativa desenvolvida para digitalizar e otimizar o gerenciamento de Registros de Não Conformidade (RNCs) em indústrias do setor metalúrgico. O sistema moderniza processos antes realizados em papel, garantindo mais rapidez, rastreabilidade, integridade dos dados e apoio ao setor de qualidade.
+O **RNC Digital System** é uma plataforma corporativa desenvolvida para digitalizar e otimizar o gerenciamento de **Registros de Não Conformidade (RNCs)** em indústrias do setor metalúrgico. A solução substitui processos manuais baseados em papel por uma arquitetura moderna e confiável, garantindo velocidade, integridade e rastreabilidade completa dos dados.
 
-📌 Visão Geral
+---
 
-Objetivo: substituir o fluxo manual de RNCs por uma plataforma digital robusta e confiável.
+## 📌 Visão Geral
 
-Problema que resolve:
+- **Objetivo:** Digitalizar o processo de controle e tratamento de RNCs.
+- **Problema que resolve:**
+  - Elimina descentralização dos dados.
+  - Aumenta a confiabilidade das auditorias.
+  - Reduz perdas de informações durante análises.
+  - Melhora o tempo de reação e decisão da área de qualidade.
+- **Público-alvo:** indústrias metalúrgicas com necessidade de rastreabilidade e padronização.
 
-Reduz a descentralização e perda de informações.
+---
 
-Aumenta a confiabilidade das auditorias.
+# 🏗️ Arquitetura do Sistema
 
-Melhora o tempo de análise e tomada de decisão.
+O sistema utiliza uma arquitetura modular, com foco em escalabilidade, segurança e clareza na separação das responsabilidades.
 
-Público-alvo: indústrias metalúrgicas que buscam digitalização e eficiência no controle de qualidade.
 
-🏗️ Arquitetura do Sistema
+## 🔙 Backend
 
-O sistema foi projetado com uma arquitetura modular, segura e escalável, suportando tanto operações síncronas (API REST) quanto comunicação em tempo real (WebSocket).
+**Tecnologias:**
+- FastAPI  
+- SQLAlchemy  
+- python-jose (JWT)  
+- bcrypt  
+- Uvicorn  
+- psycopg2  
+- PostgreSQL  
 
-Backend
+**Camadas:**
 
-Framework: FastAPI
+| Camada        | Responsabilidade                                             |
+|---------------|--------------------------------------------------------------|
+| `model`       | Mapeamento ORM das tabelas                                   |
+| `schema`      | Tipagem e validação com Pydantic                             |
+| `router`      | Definição dos endpoints                                      |
+| `service`     | Regras de negócio e fluxo principal                          |
+| `repository`  | Acesso ao banco e queries                                    |
+| `core`        | Configurações, autenticação, conexões e inicialização        |
+| `utils`       | Funções auxiliares                                           |
+| `websocket`   | Gerenciamento da comunicação em tempo real                   |
 
-ORM: SQLAlchemy
+---
 
-Autenticação: JWT (python-jose)
+## ☁️ Infraestrutura
 
-Criptografia de senha: bcrypt
+- **Containerização:** Docker  
+- **Hospedagem:** AWS  
+- **Comunicação:** REST + WebSocket  
 
-Servidor: Uvicorn
+---
 
-Banco de Dados: PostgreSQL
+# 📋 Funcionalidades Principais
 
-Driver: psycopg2
+- Cadastro, atualização e rastreamento completo de RNCs  
+- Autenticação segura baseada em JWT  
+- Criptografia de senha com bcrypt  
+- Dashboard gerencial para administradores  
+- Comunicação em tempo real para etapas do ciclo do RNC  
+- Controle de permissões baseado em papéis (RBAC)  
 
+---
 
-Camadas da aplicação
+# 🧩 Regras de Negócio
 
-O backend segue uma estrutura clara e separada em responsabilidades:
+### 🔄 Fluxo do RNC
 
-Camada	Responsabilidade
-model	Mapeamento das tabelas (ORM).
-schema	Validação e tipagem dos dados (Pydantic).
-router	Definição das rotas e endpoints da API.
-service	Regras de negócio e fluxo de operações.
-repository	Acesso ao banco de dados e queries.
-core	Configurações, autenticação e dependências.
-utils	Funções auxiliares.
-websocket	Gerenciamento de eventos em tempo real.
+1. **Operador** cria o RNC  
+2. **QA** realiza análise e apontamento  
+3. **Técnico** executa o retrabalho  
+4. **QA** valida o retrabalho  
+5. Caso esteja conforme → **RNC aprovado**  
+6. Caso contrário → retorna ao retrabalho ou é **refugado**  
 
+---
 
-🚀 Infraestrutura
+### 🔐 Permissões por tipo de usuário
 
-Containerização: Docker
+| Usuário       | Permissões |
+|---------------|------------|
+| **Operador**  | Criar RNCs |
+| **Técnico**   | Realizar retrabalho |
+| **QA / Eng.** | Analisar, aprovar, reprovar e fechar RNCs |
+| **Admin**     | Dashboard, estatísticas e visão ampla do sistema |
 
-Hospedagem planejada: AWS
+---
 
-Implementação preparada para serviços como ECS/EKS, RDS, EC2 ou Lightsail.
+# 🔐 Segurança dos Dados
 
-Comunicação:
+O sistema foi projetado com políticas rígidas de segurança:
 
-REST para operações tradicionais.
+- Autenticação com **JWT**
+- Senhas criptografadas com **bcrypt**
+- RBAC — controle de acesso por papéis
+- Logs e rastreabilidade para auditoria
+- Separação clara entre camadas de negócio, persistência e API
 
-WebSocket para eventos em tempo real (criação, atualização e fechamento de RNCs).
+---
 
-📋 Funcionalidades Principais
+# 🛠️ Stack Técnica Completa
 
-Cadastro e atualização de RNCs
+### **Backend**
+- Python
+- FastAPI
+- SQLAlchemy
+- python-jose
+- bcrypt
+- psycopg2
+- Uvicorn  
 
-Gestão completa do ciclo de vida do RNC
+### **Banco**
+- PostgreSQL  
 
-Autenticação segura baseada em JWT
+---
 
-Hash seguro de senha com bcrypt
+# ▶️ Como Rodar o Projeto
 
-Atualizações em tempo real via WebSocket
-
-Diferentes perfis e permissões por usuário
-
-Dashboard para administradores
-
-
-🧩 Regras de Negócio
-
-O ciclo do RNC segue fielmente a prática das indústrias metalúrgicas:
-
-Fluxo do ciclo de vida
-
-Operador cria o RNC
-
-QA analisa e realiza apontamento
-
-Técnico executa o retrabalho
-
-QA valida se o retrabalho resolveu a não conformidade
-
-Se conforme → RNC é aprovado
-
-Se não conforme → retorna ao retrabalho ou é classificado como refugo
-
-Permissões
-Usuário	Permissões
-Operador	Criar RNCs
-Técnico	Executar retrabalho e registrar ações
-QA / Engenharia	Aprovar, reprovar, validar e fechar RNCs
-Administrador	Acesso a dashboard, estatísticas e visão geral
-🔐 Segurança dos Dados
-
-A arquitetura prioriza confidencialidade, integridade e rastreabilidade.
-
-Medidas implementadas:
-
-Autenticação com JWT Tokens
-
-Criptografia de senha com bcrypt
-
-Política de acesso baseada em papéis (RBAC)
-
-Comunicação estruturada entre cliente e servidor
-
-Separação clara entre regras de negócio e repositórios
-
-Logs detalhados e eventos via WebSocket para auditoria
-
-🛠️ Stack Técnica Completa
-Backend
-
-Python
-
-FastAPI
-
-SQLAlchemy
-
-python-jose
-
-bcrypt
-
-psycopg2
-
-Uvicorn
-
-Frontend
-
-TypeScript
-
-React
-
-Vite
-
-Axios
-
-Tailwind CSS
-
-Lucide-react
-
-Framer-motion
-
-Immer
-
-Banco
-
-PostgreSQL
-
-▶️ Como Rodar o Projeto
+```bash
 # 1. Clonar o repositório
 git clone <url-do-repositorio>
 
 # 2. Acessar o diretório
-cd rnc-digital-system
+cd backend_rnc_digital_system
 
-Backend
+
 # 3. Instalar dependências
 pip install -r requirements.txt
 
@@ -180,42 +136,42 @@ source .venv/bin/activate
 
 # 5. Executar o servidor
 uvicorn server:app --reload
+```
 
+(O frontend pode ser executado conforme documentado no diretório correspondente.)
 
-(O frontend pode ser executado conforme documentado no diretório correspondente, caso exista.)
-
-📈 Benefícios para o Negócio
+# 📈 Benefícios para o Negócio
 
 A adoção do RNC Digital System gera impacto direto nos indicadores de qualidade e eficiência operacional:
 
-Antes do sistema
+## Antes do sistema
 
-Processos manuais demorados
+- Processos manuais demorados
 
-Formularização em papel sujeita a extravios
+- Formularização em papel sujeita a extravios
 
-Dificuldade para rastrear informações
+- Dificuldade para rastrear informações
 
-Erros frequentes por falta de integridade dos dados
+- Erros frequentes por falta de integridade dos dados
 
-Tempo elevado entre criação e análise do RNC
+- Tempo elevado entre criação e análise do RNC
 
-Após implementação
+## Após implementação
 
-Centralização total dos dados
+- Centralização total dos dados
 
-Rastreabilidade completa do ciclo de vida de cada RNC
+- Rastreabilidade completa do ciclo de vida de cada RNC
 
-Redução de erros durante análises
+- Redução de erros durante análises
 
-Agilidade na tomada de decisão
+- Agilidade na tomada de decisão
 
-Melhor visibilidade para auditorias internas e externas
+- Melhor visibilidade para auditorias internas e externas
 
-Economia significativa de tempo no setor de qualidade
+- Economia significativa de tempo no setor de qualidade
 
-Redução na ocorrência de peças não conformes por falhas de processo
+- Redução na ocorrência de peças não conformes por falhas de processo
 
-📘 Conclusão
+# 📘 Conclusão
 
 O RNC Digital System é uma solução moderna, segura e escalável para transformar o processo de gestão de RNCs. Ele promove maior rastreabilidade, agiliza operações de qualidade e aumenta a confiabilidade das auditorias, contribuindo diretamente para a eficiência e competitividade da indústria metalúrgica.
