@@ -1,13 +1,19 @@
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.security import create_access_token
+from app.core.logging_config import setup_logging
 from contextlib import asynccontextmanager
 from app.core.config import settings
 from datetime import timedelta
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import HTTPException
 import os
 
 from app.database import create_db_and_tables
 from app.router import user_router, auth_router, rnc_router, part_router
+from app.websocket.route import router as websocket_router
+
+setup_logging()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -52,6 +58,13 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"error": exc.detail}
+    )
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
@@ -60,10 +73,12 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-app.include_router(auth_router.router, prefix="/auth", tags=["Authentication"])
-app.include_router(user_router.router, prefix="/user", tags=["Users"])
-app.include_router(rnc_router.router, prefix="/rnc", tags=["RNC"])
-app.include_router(part_router.router, prefix="/part", tags=["Parts"])
+app.include_router(auth_router.router, prefix="/api/auth", tags=["Authentication"])
+app.include_router(user_router.router, prefix="/api/user", tags=["Users"])
+app.include_router(rnc_router.router, prefix="/api/rnc", tags=["RNC"])
+app.include_router(part_router.router, prefix="/api/part", tags=["Parts"])
+
+app.include_router(websocket_router, prefix="/ws", tags=["WebSocket"])
 
 @app.get('/')
 async def root():
