@@ -9,8 +9,7 @@ class UserRole(str, Enum):
     ADMIN = "admin"
     OPERADOR = "operador"
     QUALIDADE = "qualidade"
-    TECNICO_USINAGEM = "tecnico_usinagem"
-    TECNICO_FUNDICAO = "tecnico_fundicao"
+    TECNICO = "tecnico"
     ENGENHARIA = "engenharia"
 
 class User(SQLModel, table=True):
@@ -22,7 +21,8 @@ class User(SQLModel, table=True):
     active: bool = Field(default=True)
 
     open_rncs: List["RNC"] = Relationship(back_populates="open_by", sa_relationship_kwargs={"foreign_keys": "RNC.open_by_id"})
-    rncs_responsible: List["RNC"] = Relationship(back_populates="current_responsible", sa_relationship_kwargs={"foreign_keys": "RNC.current_responsible_id"})
+    analysis_rncs: List["RNC"] = Relationship(back_populates="analysis_by", sa_relationship_kwargs={"foreign_keys": "RNC.analysis_user_id"})
+    rework_rncs: List["RNC"] = Relationship(back_populates="rework_by", sa_relationship_kwargs={"foreign_keys": "RNC.rework_user_id"})
     rncs_closed: List["RNC"] = Relationship(back_populates="closed_by", sa_relationship_kwargs={"foreign_keys": "RNC.closed_by_id"})
 
     def set_password(self, password: str):
