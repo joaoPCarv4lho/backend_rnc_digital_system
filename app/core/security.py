@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from app.core.config import settings
 from jose import JWTError, jwt
 import logging
@@ -31,12 +31,35 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
         logger.exception(f"   💥 ERRO em create_access_token: {e}")
         raise RuntimeError("Failed to create JWT token") from e
 
+def create_refresh_token(data: dict, expires_delta: timedelta | None = None) -> str:
+    """
+    Cria um Refresh token JWT com expiração longa.
+    Normalmente contém apenas o ID do usuário (sub)
+    """
+
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.now(timezone.utc) + expires_delta
+    else:
+        expire = datetime.now(timezone.utc) + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+    to_encode.update({"exp": expire})
+
+    encoded_jwt = jwt.encode(
+        to_encode,
+        settings.REFRESH_SECRET_KEY,
+        algorithm=settings.ALGORITHM
+    )
+
+    return encoded_jwt
+
 def verify_token(token: str) -> dict | None:
     """Verifica token JWT"""
-    try:        
+    
+    try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         logger.debug("Token verificado com sucesso")
         return payload
     except JWTError as e:
         logger.warning(f"❌ Token inválido: {e}")
         return None
+    
