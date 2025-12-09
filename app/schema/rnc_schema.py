@@ -21,7 +21,7 @@ class RNCCreate(BaseModel):
         """Valida se o nível de criticidade é válido"""
         valid_levels = ['BAIXA', 'MEDIA', 'ALTA', 'CRITICA']
         if v.upper() not in valid_levels:
-            raise ValueError(f"Nível de criticidade deve ser um de: {", ".join(valid_levels)}")
+            raise ValueError(f"Nível de criticidade deve ser um de: {', '.join(valid_levels)}")
         return v.upper()
     
     class Config:
