@@ -41,7 +41,6 @@ def require_role(*allowed_roles: model.UserRole):
 require_admin = require_role(model.UserRole.ADMIN)
 require_operador = require_role(model.UserRole.OPERADOR)
 require_qualidade = require_role(model.UserRole.QUALIDADE)
-require_tecnico_usinagem = require_role(model.UserRole.TECNICO_USINAGEM)
-require_tecnico_fundicao = require_role(model.UserRole.TECNICO_FUNDICAO)
+require_tecnico = require_role(model.UserRole.TECNICO)
 require_engenharia = require_role(model.UserRole.ENGENHARIA)
 

@@ -8,7 +8,7 @@ from app.database import get_db
 
 router = APIRouter()
 
-@router.get('/code/{part_code}', response_model=schema.PartRead, status_code=status.HTTP_200_OK, dependencies=[Depends(require_role(model.UserRole.OPERADOR, model.UserRole.TECNICO_FUNDICAO, model.UserRole.ENGENHARIA, model.UserRole.QUALIDADE))])
+@router.get('/code/{part_code}', response_model=schema.PartRead, status_code=status.HTTP_200_OK, dependencies=[Depends(require_role(model.UserRole.OPERADOR, model.UserRole.TECNICO, model.UserRole.ENGENHARIA, model.UserRole.QUALIDADE))])
 async def get_part_by_code(part_code: str, db: Annotated[Session, Depends(get_db)]):
     repo = repository.PartRepository(db)
     part_service = service.PartService(repo)
