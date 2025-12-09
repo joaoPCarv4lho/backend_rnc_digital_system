@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     SECRET_KEY: str = Field(..., description="Chave secreta usada para geração de token JWT")
     ALGORITHM: str = Field(default="HS256", description="Algoritmo JWT padrão")
     ACCESS_TOKEN_EXPIRE_IN_MINUTES: int = Field(default=60, description="Tempo de expiração do token")
+    REFRESH_TOKEN_EXPIRE_DAYS: int = Field(default=7, description="Tempo de expiração do refresh_token")
+    REFRESH_SECRET_KEY: str = Field(..., description="Chave secreta para geração de refresh_token")
 
     DATABASE_URL: str = Field(..., description="URL de conexão com o banco de dados")
 
