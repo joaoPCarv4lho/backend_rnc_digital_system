@@ -6,8 +6,10 @@ import traceback
 logger = logging.getLogger(__name__)
 
 ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
+    "http://0.0.0.0:3000",
+    "http://52.1.240.126:3000",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
 
 router = APIRouter()
