@@ -21,7 +21,7 @@ class RNCCreate(BaseModel):
         """Valida se o nível de criticidade é válido"""
         valid_levels = ['BAIXA', 'MEDIA', 'ALTA', 'CRITICA']
         if v.upper() not in valid_levels:
-            raise ValueError(f"Nível de criticidade deve ser um de: {", ".join(valid_levels)}")
+            raise ValueError(f"Nível de criticidade deve ser um de: {', '.join(valid_levels)}")
         return v.upper()
     
     class Config:
@@ -65,8 +65,8 @@ class QualityAnalysis(BaseModel):
 class TechnicianRework(BaseModel):
     """Schema para registro do retrabalho pelo técnico"""
     condition: Optional[str] = Field(None, description="Condição atual no fluxo")
-    rework_description: str = Field(..., min_length=10, description="Descrição do retrabalho realizado")
-    actions_taken: str = Field(..., min_length=20, description="Ações tomadas durante o retrabalho")
+    rework_description: Optional[str] = Field(None, description="Descrição do retrabalho realizado")
+    actions_taken: Optional[str] = Field(None, description="Ações tomadas durante o retrabalho")
     materials_used: Optional[str] = Field(None, description="Materiais utilizados")
     time_spent: Optional[int] = Field(None, gt=0, description="Tempo gasto em minutos")
     rework_observations: Optional[str] = Field(None, description="Observações sobre o retrabalho")
