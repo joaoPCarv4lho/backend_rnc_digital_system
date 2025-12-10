@@ -58,6 +58,20 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://52.1.240.126:3000",
+        "http://localhost:3000",
+        "http://localhost",
+        "http://0.0.0.0:3000",
+        "http://0.0.0.0"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
     return JSONResponse(
@@ -65,13 +79,6 @@ async def http_exception_handler(request: Request, exc: HTTPException):
         content={"error": exc.detail}
     )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["0.0.0.0"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"]
-)
 
 app.include_router(auth_router.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(user_router.router, prefix="/api/user", tags=["Users"])
